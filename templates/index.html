@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatchaQ POS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-[#F8F9FA] h-screen flex overflow-hidden text-[#2B3A1F]">
+
+    {% set img_map = {
+        'Classic Salted Fries': 'https://images.unsplash.com/photo-1576107232684-1279f390859f?w=400&h=400&fit=crop',
+        'Caramel Macchiato': 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=400&h=400&fit=crop',
+        'Fried Chicken Blast': 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=400&h=400&fit=crop',
+        'Pasta Bolognese': 'https://images.unsplash.com/photo-1598866594230-a7c12756260f?w=400&h=400&fit=crop',
+        'Grilled Steak': 'https://images.unsplash.com/photo-1600891964092-4316c288032e?w=400&h=400&fit=crop',
+        'Fresh Salad': 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=400&fit=crop',
+        'Premium Matcha Latte': 'https://images.unsplash.com/photo-1515823662972-da6a2e4d3002?w=400&h=400&fit=crop',
+        'Butter Croissant': 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=400&h=400&fit=crop',
+        'Classic Tiramisu': 'https://images.unsplash.com/photo-1584589167171-541ce45f1eea?w=400&h=400&fit=crop',
+        'Strawberry Cheesecake': 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=400&h=400&fit=crop',
+        'Club Sandwich': 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=400&h=400&fit=crop',
+        'Iced Lemon Tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&h=400&fit=crop',
+        'Smash Burger': 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=400&fit=crop',
+        'Espresso Shot': 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=400&h=400&fit=crop',
+        'Chocolate Pancake': 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=400&fit=crop'
+    } %}
+
+    <aside class="w-[400px] xl:w-[460px] bg-white border-r border-[#E7F0E0] flex flex-col py-8 shrink-0 z-20">
+        <div class="px-10 mb-12 flex items-center gap-4">
+            <div class="w-14 h-14 bg-[#88B06A] rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-sm shrink-0">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 8h13v8a4 4 0 01-4 4H8a4 4 0 01-4-4V8z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 10h2a2 2 0 012 2v2a2 2 0 01-2 2h-2"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 3v2"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 3v2"></path>
+                </svg>
+            </div>
+            <span class="font-extrabold text-3xl text-[#2B3A1F] tracking-tight">MatchaQ</span>
+        </div>
+
+        <div class="flex-1 px-6 space-y-3 overflow-y-auto no-scrollbar">
+            <div class="px-4 mb-4 mt-6">
+                <p class="text-sm font-bold text-[#6D8A58] uppercase tracking-widest">Main Menu</p>
+            </div>
+            <div class="flex items-center gap-5 px-5 py-4 rounded-2xl text-[#9AB88A] bg-transparent cursor-not-allowed">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4h6v6H4zm10 0h6v6h-6zM4 14h6v6H4zm10 0h6v6h-6z"></path></svg>
+                <span class="font-bold text-lg">Dashboard</span>
+            </div>
+            <a href="/?mode={{ mode }}&tab=menu" class="flex items-center gap-5 px-5 py-4 rounded-2xl transition {% if tab == 'menu' %}bg-[#F4F8F1] text-[#88B06A]{% else %}text-[#6D8A58] hover:bg-[#F9FCF7] hover:text-[#2B3A1F]{% endif %}">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                <span class="font-bold text-lg">Order</span>
+            </a>
+            
+            <div class="px-4 mb-4 mt-10">
+                <p class="text-sm font-bold text-[#6D8A58] uppercase tracking-widest">Management</p>
+            </div>
+            <a href="/?mode={{ mode }}&tab=pending" class="flex items-center justify-between px-5 py-4 rounded-2xl transition {% if tab == 'pending' %}bg-[#F4F8F1] text-[#88B06A]{% else %}text-[#6D8A58] hover:bg-[#F9FCF7] hover:text-[#2B3A1F]{% endif %}">
+                <div class="flex items-center gap-5">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span class="font-bold text-lg">Pending</span>
+                </div>
+                {% if pending_size > 0 %}<span class="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">{{ pending_size }}</span>{% endif %}
+            </a>
+            <a href="/?mode={{ mode }}&tab=history" class="flex items-center gap-5 px-5 py-4 rounded-2xl transition {% if tab == 'history' %}bg-[#F4F8F1] text-[#88B06A]{% else %}text-[#6D8A58] hover:bg-[#F9FCF7] hover:text-[#2B3A1F]{% endif %}">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                <span class="font-bold text-lg">Transactions</span>
+            </a>
+        </div>
+
+        <div class="px-8 mt-auto">
+            <div class="flex items-center justify-between border border-[#E7F0E0] rounded-3xl p-5 hover:bg-[#F4F8F1] cursor-pointer transition">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 bg-[#E7F0E0] rounded-full overflow-hidden shrink-0">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Admin" alt="Profile" class="w-full h-full object-cover">
+                    </div>
+                    <div class="overflow-hidden">
+                        <p class="text-lg font-extrabold text-[#2B3A1F] truncate">Admin</p>
+                        <p class="text-sm font-bold text-[#6D8A58] capitalize mt-1">{{ mode }} Shift 1</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div class="flex-1 flex h-full overflow-hidden">
+        
+        <div class="flex-1 flex flex-col h-full overflow-hidden">
+            
+            <header class="h-24 bg-[#F8F9FA] flex items-center justify-between px-10 shrink-0 z-10">
+                <div class="w-1/3 flex items-center">
+                    <div class="flex bg-white p-1.5 rounded-xl border border-[#E7F0E0] shadow-sm">
+                        <a href="/?mode=cashier&tab={{ tab }}" class="px-8 py-2 text-base font-bold rounded-lg transition {% if mode == 'cashier' %}bg-[#F4F8F1] text-[#88B06A]{% else %}text-[#6D8A58] hover:text-[#2B3A1F]{% endif %}">Cashier</a>
+                        <a href="/?mode=barista&tab={{ tab }}" class="px-8 py-2 text-base font-bold rounded-lg transition {% if mode == 'barista' %}bg-[#F4F8F1] text-[#88B06A]{% else %}text-[#6D8A58] hover:text-[#2B3A1F]{% endif %}">Barista</a>
+                    </div>
+                </div>
+                
+                <div class="w-1/3 flex justify-center">
+                    {% if (tab == 'menu' and mode == 'cashier') or tab == 'history' %}
+                    <form id="searchForm" action="/" method="GET" class="relative w-full max-w-md">
+                        <input type="hidden" name="mode" value="{{ mode }}">
+                        <input type="hidden" name="tab" value="{{ tab }}">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-[#6D8A58]">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </span>
+                        <input id="searchInput" type="text" name="q" value="{{ request.args.get('q') or '' }}" oninput="liveSearch()" placeholder="{% if tab == 'history' %}Search customer or ID...{% else %}Search menu (Trie)...{% endif %}" class="w-full bg-white text-base font-bold rounded-full border border-[#E7F0E0] pl-12 pr-5 py-3 focus:outline-none focus:border-[#88B06A] focus:ring-2 focus:ring-[#E7F0E0] shadow-sm transition text-[#2B3A1F]" autofocus autocomplete="off">
+                    </form>
+                    {% endif %}
+                </div>
+                
+                <div class="w-1/3 flex justify-end">
+                    <h1 class="font-bold text-[#6D8A58] text-sm tracking-widest uppercase">Main Menu <span class="mx-3 text-[#B0C7A1]">/</span> <span class="text-[#2B3A1F]">{{ tab | capitalize }}</span></h1>
+                </div>
+            </header>
+
+            <main class="flex-1 px-10 pt-8 pb-10 overflow-y-auto no-scrollbar relative">
+                {% if tab == 'menu' %}
+                    {% if mode == 'cashier' %}
+                        {% if menu_db|length == 0 %}
+                            <div class="text-center py-20">
+                                <span class="text-6xl mb-4 block">🔍</span>
+                                <h3 class="text-2xl font-bold text-[#2B3A1F] mb-2">Menu not found</h3>
+                                <p class="text-[#6D8A58]">Try using different keywords.</p>
+                                <a href="/?mode=cashier&tab=menu" class="mt-6 inline-block bg-[#88B06A] text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-[#88B06A]/30">Show All Menu</a>
+                            </div>
+                        {% endif %}
+
+                        <div class="grid grid-cols-2 lg:grid-cols-3 gap-7 pb-10">
+                            {% for key, menu in menu_db.items() %}
+                            {% set is_in_cart = key in cart %}
+                            
+                            <form action="/cart/add/{{ key }}" method="POST" class="m-0 h-full">
+                                <input type="hidden" name="q" value="{{ request.args.get('q') or '' }}">
+                                <button type="submit" class="w-full text-left bg-white rounded-3xl shadow-sm border transition-all duration-200 group flex flex-col overflow-hidden h-full focus:outline-none relative {% if is_in_cart %}border-[#88B06A] ring-4 ring-[#F4F8F1] shadow-md{% else %}border-[#E7F0E0] hover:border-[#88B06A] hover:shadow-lg{% endif %}">
+                                    
+                                    {% set foto_url = img_map.get(menu.nama, 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&h=400&fit=crop') %}
+                                    <div class="w-full h-48 bg-[#F4F8F1] overflow-hidden shrink-0 relative">
+                                        <img src="{{ foto_url }}" alt="{{ menu.nama }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                        
+                                        <div class="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-white transition-opacity shadow-md {% if is_in_cart %}bg-[#88B06A] opacity-100{% else %}bg-[#88B06A] opacity-0 group-hover:opacity-100{% endif %}">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="p-6 flex flex-col flex-1 w-full">
+                                        <div>
+                                            <h3 class="font-extrabold text-xl text-[#2B3A1F] leading-snug line-clamp-2">{{ menu.nama }}</h3>
+                                            <p class="text-sm text-[#6D8A58] mt-2 font-bold">{{ menu.varian }}</p>
+                                        </div>
+                                        <div class="mt-auto pt-6 flex items-center justify-between w-full">
+                                            <p class="font-black text-2xl text-[#88B06A]">${{ menu.harga }}</p>
+                                        </div>
+                                    </div>
+                                </button>
+                            </form>
+                            {% endfor %}
+                        </div>
+
+                    {% elif mode == 'barista' %}
+                        <div class="flex justify-between items-end mb-8">
+                            <h2 class="text-3xl font-extrabold text-[#2B3A1F]">Kitchen Queue</h2>
+                            <p class="text-lg font-bold text-[#88B06A]">{{ queue_size }} Active Queue</p>
+                        </div>
+                        
+                        {% if orders|length > 0 %}
+                            <div class="bg-white border-2 border-[#88B06A] rounded-[2rem] p-8 shadow-sm max-w-3xl">
+                                <div class="flex justify-between items-start mb-8 border-b border-[#E7F0E0] pb-6">
+                                    <div>
+                                        <h1 class="text-5xl font-black text-[#2B3A1F]">#{{ orders[0].nomor }}</h1>
+                                        <p class="text-xl font-bold text-[#6D8A58] mt-3">{{ orders[0].nama_pelanggan }} - Table {{ orders[0].meja }}</p>
+                                    </div>
+                                    <span class="bg-[#F4F8F1] text-[#88B06A] px-6 py-3 rounded-xl text-lg font-bold">{{ orders[0].waktu }}</span>
+                                </div>
+                                
+                                <div class="space-y-4 mb-10">
+                                    {% for item in orders[0]['items'] %}
+                                    <div class="flex items-center gap-5 bg-[#F8F9FA] p-5 rounded-2xl border border-[#E7F0E0]">
+                                        <div class="w-14 h-14 bg-white text-[#88B06A] shadow-sm rounded-xl flex items-center justify-center font-black text-2xl">{{ item.qty }}x</div>
+                                        <div>
+                                            <p class="font-extrabold text-[#2B3A1F] text-xl">{{ item.nama }}</p>
+                                            <p class="text-base font-bold text-[#6D8A58] mt-1">{{ item.varian }}</p>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="flex gap-4">
+                                    <form action="/barista/process" method="POST" class="flex-1 flex">
+                                        <button type="submit" class="w-full py-5 bg-[#88B06A] hover:bg-[#749A58] text-white font-extrabold rounded-2xl shadow-lg shadow-[#88B06A]/30 transition text-xl">✅ Complete Order</button>
+                                    </form>
+                                    <form action="/barista/pending" method="POST" class="w-1/2 flex gap-3">
+                                        <input type="text" name="alasan" placeholder="Reason..." required class="w-full px-5 py-4 rounded-2xl border border-[#E7F0E0] text-lg focus:outline-none focus:border-[#88B06A] text-[#2B3A1F] font-bold">
+                                        <button type="submit" class="px-8 py-4 bg-[#F4F8F1] hover:bg-[#E7F0E0] text-[#88B06A] font-extrabold rounded-2xl border border-[#D0E2C3] transition text-xl shrink-0">⏸️ Hold</button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% else %}
+                            <p class="text-center text-[#6D8A58] py-24 border-2 border-dashed border-[#D0E2C3] rounded-3xl bg-white max-w-3xl text-xl font-bold">Kitchen is empty. Take a breath. 🍵</p>
+                        {% endif %}
+                    {% endif %}
+
+                {% elif tab == 'pending' %}
+                    <h2 class="text-3xl font-extrabold text-[#2B3A1F] mb-8">Pending Orders ({{ pending_size }})</h2>
+                    <div class="space-y-8 max-w-3xl">
+                        {% for pid, p in pending.items() %}
+                        <div class="bg-white border-2 border-[#88B06A] rounded-[2rem] p-8 shadow-sm">
+                            <div class="flex justify-between items-start mb-8 border-b border-[#E7F0E0] pb-6">
+                                <div>
+                                    <div class="flex items-center gap-4">
+                                        <h1 class="text-5xl font-black text-[#2B3A1F]">#{{ p.nomor }}</h1>
+                                        <span class="bg-red-100 text-red-600 px-3 py-1 rounded-lg text-sm font-bold uppercase tracking-wider">Pending</span>
+                                    </div>
+                                    <p class="text-xl font-bold text-[#6D8A58] mt-3">{{ p.nama_pelanggan }} - Table {{ p.meja }}</p>
+                                    <p class="text-lg text-red-500 font-extrabold mt-2 flex items-center gap-2">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                        Reason: {{ p.alasan }}
+                                    </p>
+                                </div>
+                                <form action="/barista/resolve_pending/{{ pid }}" method="POST">
+                                    <button type="submit" class="px-8 py-4 bg-[#88B06A] hover:bg-[#749A58] text-white font-extrabold rounded-2xl shadow-lg shadow-[#88B06A]/30 transition text-lg flex items-center gap-2">
+                                        ✅ Complete Order
+                                    </button>
+                                </form>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                {% for item in p['items'] %}
+                                <div class="flex items-center gap-5 bg-[#F8F9FA] p-5 rounded-2xl border border-[#E7F0E0]">
+                                    <div class="w-14 h-14 bg-white text-[#88B06A] shadow-sm rounded-xl flex items-center justify-center font-black text-2xl shrink-0">{{ item.qty }}x</div>
+                                    <div>
+                                        <p class="font-extrabold text-[#2B3A1F] text-xl">{{ item.nama }}</p>
+                                        <p class="text-base font-bold text-[#6D8A58] mt-1">{{ item.varian }}</p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% else %}
+                            <p class="text-[#6D8A58] text-xl font-bold">No pending orders.</p>
+                        {% endfor %}
+                    </div>
+
+                {% elif tab == 'history' %}
+                    <div class="flex justify-between items-center mb-8 max-w-3xl">
+                        <h2 class="text-3xl font-extrabold text-[#2B3A1F]">Order History</h2>
+                    </div>
+                    
+                    {% if history|length == 0 and request.args.get('q') %}
+                        <div class="text-center py-20 max-w-3xl">
+                            <span class="text-6xl mb-4 block">🔍</span>
+                            <h3 class="text-2xl font-bold text-[#2B3A1F] mb-2">Customer not found</h3>
+                            <p class="text-[#6D8A58]">No history matches "{{ request.args.get('q') }}".</p>
+                            <a href="/?mode={{ mode }}&tab=history" class="mt-6 inline-block bg-[#88B06A] text-white font-bold py-3 px-6 rounded-xl shadow-lg shadow-[#88B06A]/30">Show All History</a>
+                        </div>
+                    {% endif %}
+
+                    <div class="space-y-6 max-w-3xl">
+                        {% for h in history %}
+                        <div class="bg-white border-2 border-[#E7F0E0] rounded-[2rem] p-8 shadow-sm">
+                            <div class="flex justify-between items-start mb-6 border-b border-[#F4F8F1] pb-6">
+                                <div>
+                                    <div class="flex items-center gap-4">
+                                        <h1 class="text-4xl font-black text-[#2B3A1F]">#{{ h.nomor }}</h1>
+                                        <span class="bg-[#F4F8F1] text-[#88B06A] px-3 py-1 rounded-lg text-sm font-bold uppercase tracking-wider">{{ h.status }}</span>
+                                    </div>
+                                    <p class="text-xl font-bold text-[#6D8A58] mt-3">{{ h.nama_pelanggan }} - Table {{ h.meja }}</p>
+                                    <p class="text-base font-bold text-[#88B06A] mt-2 flex items-center gap-2">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> 
+                                        Completed: {{ h.waktu_selesai }}
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm font-bold text-[#6D8A58] uppercase tracking-wider">Total Amount</p>
+                                    <p class="text-3xl font-black text-[#88B06A] mt-1">${{ h.total }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                {% for item in h['items'] %}
+                                <div class="flex items-center gap-5 bg-[#F8F9FA] p-5 rounded-2xl border border-[#E7F0E0]">
+                                    <div class="w-14 h-14 bg-white text-[#88B06A] shadow-sm rounded-xl flex items-center justify-center font-black text-2xl shrink-0">{{ item.qty }}x</div>
+                                    <div>
+                                        <p class="font-extrabold text-[#2B3A1F] text-xl">{{ item.nama }}</p>
+                                        <p class="text-base font-bold text-[#6D8A58] mt-1">{{ item.varian }}</p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% else %}
+                            {% if not request.args.get('q') %}
+                                <p class="text-[#6D8A58] text-xl font-bold">No order history.</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </main>
+        </div>
+
+        <aside class="w-[400px] xl:w-[460px] h-full bg-white border-l border-[#E7F0E0] flex flex-col shrink-0 z-20 shadow-[-10px_0_15px_rgba(0,0,0,0.02)]">
+            {% if mode == 'cashier' %}
+                <div class="h-24 px-8 flex justify-between items-center border-b border-[#E7F0E0] shrink-0">
+                    <h2 class="text-2xl font-black text-[#2B3A1F]">New Order</h2>
+                    <form action="/cart/clear" method="POST" class="m-0">
+                        <button type="submit" class="w-10 h-10 flex items-center justify-center rounded-full bg-[#F8F9FA] hover:bg-red-50 text-[#6D8A58] hover:text-red-500 transition font-bold text-xl">✕</button>
+                    </form>
+                </div>
+                
+                <form action="/cart/checkout" method="POST" class="flex flex-col flex-1 overflow-hidden">
+                    <input type="hidden" name="q" value="{{ request.args.get('q') or '' }}">
+                    <div class="flex gap-5 px-8 py-6 border-b border-[#F8F9FA]">
+                        <div class="flex-1">
+                            <label class="text-xs font-bold text-[#6D8A58] mb-2.5 block uppercase tracking-wider">Customer</label>
+                            <input type="text" name="customer_name" placeholder="Customer Name" class="w-full border border-[#E7F0E0] rounded-xl py-3 px-4 text-lg font-bold text-[#2B3A1F] focus:outline-none focus:border-[#88B06A]">
+                        </div>
+                        <div class="w-32">
+                            <label class="text-xs font-bold text-[#6D8A58] mb-2.5 block uppercase tracking-wider">Table</label>
+                            <select name="table_no" class="w-full border border-[#E7F0E0] rounded-xl py-3 px-4 text-lg font-bold text-[#2B3A1F] focus:outline-none focus:border-[#88B06A] bg-white cursor-pointer">
+                                {% for i in range(1, 21) %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="px-8 py-5 flex justify-between items-center bg-[#F8F9FA]">
+                        <div>
+                            <p class="text-xs font-bold text-[#6D8A58] uppercase tracking-wider">Order Items</p>
+                            <p class="font-black text-[#2B3A1F] text-xl mt-1">{{ cart_count }}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs font-bold text-[#6D8A58] uppercase tracking-wider">Order ID</p>
+                            <p class="font-black text-[#2B3A1F] text-xl mt-1">Auto</p>
+                        </div>
+                    </div>
+
+                    <div class="flex-1 overflow-y-auto px-8 py-6 space-y-6 no-scrollbar">
+                        {% for key, item in cart.items() %}
+                        <div class="flex gap-5 items-center group">
+                            {% set foto_url = img_map.get(item.nama, 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=150&h=150&fit=crop') %}
+                            <div class="w-20 h-20 rounded-2xl overflow-hidden shrink-0 bg-[#F8F9FA] shadow-sm border border-[#E7F0E0]">
+                                <img src="{{ foto_url }}" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="font-extrabold text-lg text-[#2B3A1F] truncate leading-tight">{{ item.nama }}</h3>
+                                <p class="text-sm font-bold text-[#6D8A58] mt-1 mb-2.5 truncate">{{ item.varian }}</p>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-3">
+                                        <button type="submit" formaction="/cart/min/{{ key }}" class="w-8 h-8 flex items-center justify-center bg-[#F4F8F1] text-[#88B06A] rounded-lg font-bold hover:bg-[#88B06A] hover:text-white transition text-xl leading-none">−</button>
+                                        <span class="text-base font-extrabold w-6 text-center text-[#2B3A1F]">{{ item.qty }}</span>
+                                        <button type="submit" formaction="/cart/add/{{ key }}" class="w-8 h-8 flex items-center justify-center bg-[#F4F8F1] text-[#88B06A] rounded-lg font-bold hover:bg-[#88B06A] hover:text-white transition text-xl leading-none">+</button>
+                                    </div>
+                                    <p class="font-black text-xl text-[#88B06A]">${{ item.harga }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mt-auto bg-white border-t border-[#E7F0E0] p-8 pb-6">
+                        <h3 class="font-extrabold text-[#2B3A1F] mb-5 text-lg">Order Summary</h3>
+                        
+                        <div class="space-y-3.5 mb-5">
+                            <div class="flex justify-between text-base">
+                                <span class="text-[#6D8A58] font-bold">Sub Total</span><span class="text-[#2B3A1F] font-extrabold">${{ subtotal_c }}</span>
+                            </div>
+                            <div class="flex justify-between text-base">
+                                <span class="text-[#6D8A58] font-bold">Service fee</span><span class="text-[#2B3A1F] font-extrabold">${{ service_c }}</span>
+                            </div>
+                            <div class="flex justify-between text-base">
+                                <span class="text-[#6D8A58] font-bold">Discount</span><span class="text-red-500 font-extrabold">-${{ discount_c | replace("-", "") }}</span>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center pt-5 mt-5 border-t border-dashed border-[#D0E2C3] mb-8">
+                            <span class="font-extrabold text-lg text-[#2B3A1F]">Total Amount</span>
+                            <span class="font-black text-4xl text-[#88B06A]">${{ total_c }}</span>
+                        </div>
+
+                        <button type="submit" class="w-full bg-[#88B06A] hover:bg-[#749A58] text-white font-black py-5 rounded-2xl shadow-lg shadow-[#88B06A]/30 transition text-xl" {% if cart_count == 0 %}disabled{% endif %}>
+                            Create Order
+                        </button>
+                    </div>
+                </form>
+                
+                <form action="/cashier/undo_kitchen" method="POST" class="px-8 pb-8 bg-white m-0">
+                    <button type="submit" class="w-full bg-[#F8F9FA] border border-[#E7F0E0] text-[#6D8A58] font-bold py-4 rounded-2xl text-base hover:bg-[#F4F8F1] hover:text-[#2B3A1F] transition" {% if undo_size == 0 %}disabled{% endif %}>
+                        ↩️ Undo Last Order (Stack)
+                    </button>
+                </form>
+
+            {% elif mode == 'barista' %}
+                <div class="h-24 px-8 flex items-center border-b border-[#E7F0E0] shrink-0">
+                    <h2 class="text-2xl font-black text-[#2B3A1F]">Kitchen Status</h2>
+                </div>
+                <div class="p-8 space-y-5">
+                    <div class="bg-[#F8F9FA] border border-[#E7F0E0] rounded-3xl p-6 flex justify-between items-center">
+                        <div>
+                            <span class="font-extrabold text-[#2B3A1F] block text-lg">Waiting</span>
+                            <span class="text-sm text-[#6D8A58] font-bold uppercase tracking-wider mt-1">Active Queue</span>
+                        </div>
+                        <span class="text-4xl font-black text-[#88B06A]">{{ queue_size }}</span>
+                    </div>
+                    <div class="bg-[#F4F8F1] border border-[#D0E2C3] rounded-3xl p-6 flex justify-between items-center">
+                        <div>
+                            <span class="font-extrabold text-[#88B06A] block text-lg">Pending</span>
+                            <span class="text-sm text-[#749A58] font-bold uppercase tracking-wider mt-1">In PendingMap</span>
+                        </div>
+                        <span class="text-4xl font-black text-[#88B06A]">{{ pending_size }}</span>
+                    </div>
+                </div>
+            {% endif %}
+        </aside>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const input = document.getElementById("searchInput");
+            if (input) {
+                const len = input.value.length;
+                input.focus();
+                input.setSelectionRange(len, len);
+            }
+        }
+
+        let typingTimer;
+        function liveSearch() {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(function() {
+                document.getElementById("searchForm").submit();
+            }, 400); 
+        }
+    </script>
+</body>
+</html>
