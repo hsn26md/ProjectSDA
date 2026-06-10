@@ -13,28 +13,42 @@ class CustomQueue:
         self._size = 0
 
     def enqueue(self, data: dict) -> None:
-        # TODO: Tambahkan node baru ke belakang (tail) antrean
+        new_node = Node(data)
+        if self.tail is None:
+            self.head = new_node
+            self.tail = new_node
+        else:
+            self.tail.next = new_node
+            self.tail = new_node
+        self._size += 1
         pass
 
     def dequeue(self) -> dict | None:
-        # TODO: Ambil dan hapus node dari depan (head) antrean
-        return None
+        if self.head is None:
+            return None
+        data = self.head.data
+        self.head = self.head.next
+        if self.head is None:
+            self.tail = None
+        self._size -= 1
+        return data
 
     def peek(self) -> dict | None:
-        # TODO: Lihat data terdepan tanpa menghapus
-        return None
+       return self.head.data if self.head else None
 
     def is_empty(self) -> bool:
-        # TODO: Cek apakah antrean kosong
-        return True
+       return self.head is None
 
     def size(self) -> int:
-        # TODO: Kembalikan ukuran antrean
-        return 0
+         return self._size
 
     def display(self) -> list:
-        # TODO: Lakukan traversal Linked List, masukkan datanya ke dalam list Python untuk UI
-        return []
+        result = []
+        current = self.head
+        while current is not None:
+            result.append(current.data)
+            current = current.next
+        return result
 
 
 # ============================================================
