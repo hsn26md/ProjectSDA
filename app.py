@@ -23,16 +23,30 @@ class MenuTrie:
         self.root = TrieNode()
 
     def insert(self, word, menu_key):
-        # TODO: Implementasikan logika memasukkan huruf per huruf ke dalam tree
-        pass
+        node = self.root
+        for char in word.lower():
+            if char not in node.children:
+                node.children[char] = TrieNode()
+            node = node.children[char]
+        node.is_end = True
+        node.menu_key = menu_key
 
     def search_prefix(self, prefix):
-        # TODO: Telusuri tree berdasarkan prefix, gunakan fungsi _dfs untuk mencari semua menu yang cocok
-        return []
+        node = self.root
+        for char in prefix.lower():
+            if char not in node.children:
+                return [] 
+            node = node.children[char]
+        
+        results = set()
+        self._dfs(node, results)
+        return list(results)
 
     def _dfs(self, node, results):
-        # TODO: Implementasikan Depth-First Search untuk mengumpulkan menu_key dari node yang is_end = True
-        pass
+        if node.is_end:
+            results.add(node.menu_key)
+        for child in node.children.values():
+            self._dfs(child, results)
 
 # ==========================================
 # STATE MEMORI (Instansiasi Objek SDA)
