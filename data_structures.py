@@ -59,34 +59,26 @@ class PendingMap:
         self._store: dict = {}
 
     def add(self, order_id: str, data: dict) -> None:
-        # TODO: Tambahkan data pesanan ke dalam hash map berdasarkan order_id
-        pass
+        self._store[order_id] = data
 
     def remove(self, order_id: str) -> dict | None:
-        # TODO: Hapus dan kembalikan data pesanan dari hash map
-        return None
+        return self._store.pop(order_id, None)
 
     def get(self, order_id: str) -> dict | None:
-        # TODO: Ambil data tanpa menghapus
-        return None
+        return self._store.get(order_id, None)
 
     def exists(self, order_id: str) -> bool:
-        # TODO: Cek apakah order_id ada di dalam hash map
-        return False
+        return order_id in self._store
 
     def get_all(self) -> dict:
-        # TODO: Kembalikan seluruh isi hash map
-        return {}
+        return self._store
 
     def size(self) -> int:
-        # TODO: Kembalikan jumlah pesanan pending
-        return 0
+        return len(self._store)
 
     def is_empty(self) -> bool:
-        # TODO: Cek apakah hash map kosong
-        return True
-
-
+        return len(self._store) == 0
+    
 # ============================================================
 # TUGAS 3: Implementasi Stack (LIFO)
 # ============================================================
